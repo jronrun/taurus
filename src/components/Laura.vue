@@ -33,24 +33,42 @@
       <v-toolbar-side-icon @click.stop="drawerRight = !drawerRight"></v-toolbar-side-icon>
     </v-toolbar-ext>
 
-    <v-btn
-      fab
-      small
-      top
-      right
-      color="grey"
-      dark
-      fixed
-      @click.stop="isToolbarVisible = !isToolbarVisible"
-    >
-      <v-icon>add</v-icon>
-    </v-btn>
-
     <v-navigation-drawer
-      fixed
+      stateless
+      hide-overlay
+      :mini-variant.sync="mini"
       v-model="drawer"
       app
     >
+      <v-toolbar flat class="transparent">
+        <v-list class="pa-0">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img src="https://randomuser.me/api/portraits/men/85.jpg" >
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>John Leider</v-list-tile-title>
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-btn icon @click.native.stop="mini = !mini">
+                <v-icon>chevron_left</v-icon>
+              </v-btn>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list>
+      </v-toolbar>
+      <v-list class="pt-0" dense>
+        <v-divider></v-divider>
+        <v-list-tile v-for="item in items" :key="item.title" @click="">
+          <v-list-tile-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+
       <v-list dense>
         <v-list-tile @click.stop="left = !left">
           <v-list-tile-action>
@@ -73,24 +91,6 @@
       <v-container fluid fill-height>
         <v-layout justify-center align-center>
           <v-flex shrink>
-            <v-tooltip right>
-              <v-btn
-                icon
-                large
-                :href="source"
-                target="_blank"
-                slot="activator"
-              >
-                <v-icon large>code</v-icon>
-              </v-btn>
-              <span>Source</span>
-            </v-tooltip>
-            <v-tooltip right>
-              <v-btn icon large href="https://codepen.io/johnjleider/pen/KQrPKJ" target="_blank" slot="activator">
-                <v-icon large>mdi-codepen</v-icon>
-              </v-btn>
-              <span>Codepen</span>
-            </v-tooltip>
 
             <v-toolbar-side-icon @click.stop="isToolbarVisible = !isToolbarVisible"></v-toolbar-side-icon>
 
@@ -121,7 +121,12 @@
       drawer: false,
       drawerRight: false,
       right: null,
-      left: null
+      left: null,
+      mini: true,
+      items: [
+        { title: 'Home', icon: 'dashboard' },
+        { title: 'About', icon: 'question_answer' }
+      ],
     }),
     props: {
       source: String
