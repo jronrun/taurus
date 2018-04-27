@@ -6,7 +6,7 @@ import Vuetify from 'vuetify';
 Vue.use(Vuetify);
 import 'vuetify/src/stylus/main.styl';
 
-import 'material-design-icons/iconfont/material-icons.css';
+// import 'material-design-icons/iconfont/material-icons.css';
 // import 'font-awesome/css/font-awesome.min.css';
 
 Vue.config.productionTip = false;

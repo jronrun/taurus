@@ -33,6 +33,19 @@
       <v-toolbar-side-icon @click.stop="drawerRight = !drawerRight"></v-toolbar-side-icon>
     </v-toolbar-ext>
 
+    <v-btn
+      fab
+      small
+      top
+      right
+      color="grey"
+      dark
+      fixed
+      @click.stop="isToolbarVisible = !isToolbarVisible"
+    >
+      <v-icon>add</v-icon>
+    </v-btn>
+
     <v-navigation-drawer
       fixed
       v-model="drawer"
