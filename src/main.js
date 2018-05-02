@@ -13,6 +13,20 @@ Vue.config.productionTip = false;
 import App from './App';
 import router from './router';
 
+import Layout from './components/Layout'
+
+/*
+  import Layout from './Layout';
+  export default {
+    components: {
+      'layout': Layout
+    },
+    data: () => ({
+    })
+  }
+ */
+Vue.component('layout', Layout);
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
