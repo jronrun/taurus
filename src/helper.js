@@ -1,5 +1,8 @@
 
-export function viewport() {
+const storage = window.localStorage
+let helper = {}
+
+helper.viewport = () => {
   //https://stackoverflow.com/questions/1248081/get-the-browser-viewport-dimensions-with-javascript
   return {
     width: Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
@@ -7,4 +10,4 @@ export function viewport() {
   }
 }
 
-
+export default helper

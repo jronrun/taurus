@@ -93,14 +93,13 @@
 
 <script>
   import VToolbarExt from './VToolbarExt';
-  import * as Helper from './util/helper'
 
   export default {
     components: {
       'v-toolbar-ext': VToolbarExt
     },
     data: () => ({
-      rightWidth: Helper.viewport().width / 2
+      rightWidth: global.helper.viewport().width / 2
     }),
     computed: {
 
@@ -113,7 +112,7 @@
       let that = this;
       this.$nextTick(function() {
         window.addEventListener('resize', () => {
-          that.rightWidth = Helper.viewport().width / 2;
+          that.rightWidth = global.helper.viewport().width / 2;
         });
       });
     },
