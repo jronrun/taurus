@@ -15,7 +15,7 @@ export default {
   },
 
   watch: {
-    visible: function (val) {
+    visible (val) {
       this.isActive = this.visible = true === val;
     }
   },

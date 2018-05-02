@@ -85,7 +85,9 @@
       temporary
       v-model="left"
       fixed
-    ></v-navigation-drawer>
+    >
+      left
+    </v-navigation-drawer>
 
     <v-content>
       <v-container fluid fill-height>
@@ -104,7 +106,9 @@
       temporary
       v-model="right"
       fixed
-    ></v-navigation-drawer>
+    >
+      right
+    </v-navigation-drawer>
 
   </v-app>
 </template>
@@ -122,7 +126,7 @@
       drawerRight: false,
       right: null,
       left: null,
-      mini: true,
+      mini: false,
       items: [
         { title: 'Home', icon: 'dashboard' },
         { title: 'About', icon: 'question_answer' }
