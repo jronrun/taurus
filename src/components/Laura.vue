@@ -5,6 +5,7 @@
     :right="right"
     :drawer="drawer"
     :drawerRight="drawerRight"
+    :footer="footer"
   >
 
     <template slot="slot-drawer">
@@ -55,8 +56,47 @@
       </v-toolbar-side-icon>
     </template>
 
+
+
+
+    <v-card>
+      <v-card-media src="/static/doc-images/cards/desert.jpg" height="200px">
+      </v-card-media>
+      <v-card-title primary-title>
+        <div>
+          <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+          <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
+        </div>
+      </v-card-title>
+      <v-card-actions>
+        <v-btn flat color="orange">Share</v-btn>
+        <v-btn flat color="orange">Explore</v-btn>
+      </v-card-actions>
+    </v-card>
+
+    <v-toolbar-side-icon @click.stop="right = !right">
+    </v-toolbar-side-icon>
+
     <v-toolbar-side-icon @click.stop="toolbar = !toolbar">
     </v-toolbar-side-icon>
+
+    <v-toolbar-side-icon @click.stop="left = !left">
+    </v-toolbar-side-icon>
+
+    <v-card>
+      <v-card-media src="/static/doc-images/cards/desert.jpg" height="200px">
+      </v-card-media>
+      <v-card-title primary-title>
+        <div>
+          <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+          <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
+        </div>
+      </v-card-title>
+      <v-card-actions>
+        <v-btn flat color="orange">Share</v-btn>
+        <v-btn flat color="orange">Explore</v-btn>
+      </v-card-actions>
+    </v-card>
 
   </layout>
 </template>
@@ -69,6 +109,7 @@
       right: false,
       left: false,
       toolbar: false,
+      footer: false,
       items: [
         {title: 'Home', icon: 'dashboard'},
         {title: 'About', icon: 'question_answer'}

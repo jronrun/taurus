@@ -11,7 +11,7 @@
       </slot>
     </v-navigation-drawer>
 
-    <v-toolbar-ext
+    <v-toolbar-ext v-if="toolbar"
       color="blue darken-3"
       dark
       fixed
@@ -26,7 +26,7 @@
     <v-navigation-drawer
       stateless
       hide-overlay
-      :mini-variant.sync="drawerMini"
+      :mini-variant="drawerMini"
       v-model="drawer"
       app
     >
@@ -56,22 +56,15 @@
       temporary
       v-model="left"
       fixed
+      :permanent="left"
     >
       <slot name="slot-left">
       </slot>
     </v-navigation-drawer>
 
     <v-content>
-      <v-container fluid fill-height>
-        <v-layout justify-center align-center>
-          <v-flex shrink>
-
-            <slot>
-            </slot>
-
-          </v-flex>
-        </v-layout>
-      </v-container>
+      <slot>
+      </slot>
     </v-content>
 
     <v-navigation-drawer
@@ -79,6 +72,9 @@
       temporary
       v-model="right"
       fixed
+      hide-overlay
+      :permanent="right"
+      :width="rightWidth"
     >
       <slot name="slot-right">
       </slot>
@@ -97,13 +93,30 @@
 
 <script>
   import VToolbarExt from './VToolbarExt';
+  import * as Helper from './util/helper'
 
   export default {
     components: {
       'v-toolbar-ext': VToolbarExt
     },
     data: () => ({
+      rightWidth: Helper.viewport().width / 2
     }),
+    computed: {
+
+    },
+    watch: {
+
+    },
+    mounted() {
+      // https://stackoverflow.com/questions/47219272/how-can-i-use-window-size-in-a-vue-method
+      let that = this;
+      this.$nextTick(function() {
+        window.addEventListener('resize', () => {
+          that.rightWidth = Helper.viewport().width / 2;
+        });
+      });
+    },
     props: {
       toolbar: {
         type: Boolean,
