@@ -1,9 +1,7 @@
 import Vue from 'vue'
-import config from '@/config'
 import VueI18n from 'vue-i18n'
-import pi from '../helper'
 
-const locales = ['zh-CN', 'en-US']
+const locales = global.config.locales.map(v => v.value)
 
 Vue.use(VueI18n)
 
@@ -13,7 +11,7 @@ locales.forEach(v => {
 })
 
 const i18n = new VueI18n({
-  locale: pi.storeData('locale', config.locale),
+  locale: global.config.locale,
   silentTranslationWarn: true,
   messages
 })
