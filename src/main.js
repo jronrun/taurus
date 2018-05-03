@@ -13,8 +13,11 @@ Vue.config.productionTip = false
 import App from './App'
 import router from './router'
 
+import _ from 'lodash'
+global._ = _
+
 import helper from './helper'
-global.helper = helper
+global.pi = helper
 
 /* eslint-disable no-new */
 new Vue({
