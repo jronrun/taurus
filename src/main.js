@@ -13,19 +13,6 @@ Vue.config.productionTip = false
 import App from './App'
 import router from './router'
 
-/*
-  import Layout from './Layout'
-  export default {
-    components: {
-      'layout': Layout
-    },
-    data: () => ({
-    })
-  }
- */
-import Layout from './components/Layout'
-Vue.component('layout', Layout)
-
 import helper from './helper'
 global.helper = helper
 
