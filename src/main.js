@@ -2,10 +2,6 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 
-import Vuetify from 'vuetify'
-Vue.use(Vuetify)
-import 'vuetify/src/stylus/main.styl'
-
 // import 'material-design-icons/iconfont/material-icons.css'
 // import 'font-awesome/css/font-awesome.min.css'
 
@@ -16,12 +12,20 @@ import router from './router'
 import _ from 'lodash'
 global._ = _
 
-import helper from './helper'
-global.pi = helper
+import pi from './helper'
+global.pi = pi
+
+import i18n from './i18n/'
+
+import Vuetify from 'vuetify'
+Vue.use(Vuetify)
+import 'vuetify/src/stylus/main.styl'
+
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  i18n,
   router,
   components: { App },
   template: '<App/>',
