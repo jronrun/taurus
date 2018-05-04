@@ -8,7 +8,11 @@ const locales = [
     value: 'zh-CN'
   }
 ]
-const colors = ['primary', 'blue', 'green', 'indigo', 'lime', 'purple', 'red', 'orange', 'deep-purple', 'brown']
+
+const colors = [
+  'grey', 'blue-grey', 'primary', 'blue', 'green', 'indigo',
+  'lime', 'purple', 'red', 'orange', 'deep-purple', 'brown',
+]
 
 const [ defaultLocale ] = locales
 const [ defaultColor ] = colors

@@ -1,5 +1,5 @@
 <template>
-  <v-app id="laura">
+  <v-app id="laura" :dark="dark">
     <v-toolbar
       :class="theme"
       dark
@@ -32,6 +32,15 @@
           <v-icon dark>format_paint</v-icon>
         </v-btn>
         <v-list>
+          <v-list-tile>
+            <v-switch
+              v-model="dark"
+              :dark="dark"
+              color="red darken-3"
+              hide-details
+            >
+            </v-switch>
+          </v-list-tile>
           <v-list-tile
             v-for="aColor in colors"
             :key="aColor"
@@ -45,10 +54,43 @@
     </v-toolbar>
 
     <v-navigation-drawer
-      fixed
+      stateless
+      hide-overlay
+      :mini-variant.sync="drawerMini"
       v-model="drawer"
+      :dark="dark"
+      fixed
       app
     >
+      <v-toolbar flat class="transparent">
+        <v-list class="pa-0">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img src="https://randomuser.me/api/portraits/men/85.jpg" >
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>John Leider</v-list-tile-title>
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-btn icon @click.native.stop="drawerMini = !drawerMini">
+                <v-icon>chevron_left</v-icon>
+              </v-btn>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list>
+      </v-toolbar>
+      <v-list class="pt-0" dense>
+        <v-divider>
+        </v-divider>
+        <v-list-tile v-for="item in items" :key="item.title" @click="">
+          <v-list-tile-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
     </v-navigation-drawer>
 
     <v-content>
@@ -57,6 +99,7 @@
 
     <v-navigation-drawer
       right
+      :dark="dark"
       temporary
       v-model="right"
       fixed
@@ -72,7 +115,7 @@
       return {
         dark: false,
         theme: helper.theme(),
-        mini: false,
+        drawerMini: false,
         drawer: true,
         right: false,
         locales: global.config.locales,
