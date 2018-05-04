@@ -1,6 +1,8 @@
 export default {
   'Home': '首页',
   'Toggle Light & Dark Theme': '切换白色&黑色主题',
+  'Language': '语言',
+  'Theme': '主题',
 
   'Logout': '注销',
   'Login': '登录',

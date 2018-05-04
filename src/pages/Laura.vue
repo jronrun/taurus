@@ -14,7 +14,10 @@
       </v-spacer>
       <v-menu offset-y>
         <v-btn icon dark slot="activator">
-          <v-icon dark>language</v-icon>
+          <v-tooltip bottom>
+            <v-icon dark slot="activator">language</v-icon>
+            <span>{{$t("Language")}}</span>
+          </v-tooltip>
         </v-btn>
         <v-list>
           <v-list-tile
@@ -29,7 +32,10 @@
       </v-menu>
       <v-menu offset-y>
         <v-btn icon dark slot="activator">
-          <v-icon dark>format_paint</v-icon>
+          <v-tooltip bottom>
+            <v-icon dark slot="activator">format_paint</v-icon>
+            <span>{{$t("Theme")}}</span>
+          </v-tooltip>
         </v-btn>
         <v-list>
           <v-list-tile>
@@ -70,7 +76,7 @@
         <v-list class="pa-0">
           <v-list-tile avatar>
             <v-list-tile-avatar>
-              <img src="https://randomuser.me/api/portraits/men/85.jpg" >
+              <img src="https://randomuser.me/api/portraits/men/85.jpg">
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>John Leider</v-list-tile-title>
@@ -114,20 +120,21 @@
 
 <script>
   import helper from '../helper'
+
   export default {
-    data () {
+    data() {
       return {
         dark: false,
         theme: helper.theme(),
         drawerMini: false,
-        drawer: true,
+        drawer: false,
         right: false,
         locales: global.config.locales,
         colors: global.config.colors
       }
     },
     methods: {
-      chgLocale (to, preview = false) {
+      chgLocale(to, preview = false) {
         if (true !== preview) {
           helper.locale(to)
         }
