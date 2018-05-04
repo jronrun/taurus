@@ -24,7 +24,7 @@
             v-for="lang in locales"
             :key="lang.value"
             @mouseover.native="chgLocale(lang.value, true)"
-            @click.native="chgLocale(lang.value)"
+            @click="chgLocale(lang.value)"
           >
             <v-list-tile-title>{{lang.name}}</v-list-tile-title>
           </v-list-tile>
@@ -56,7 +56,7 @@
             :key="aColor"
             :class="aColor"
             @mouseover.native="chgTheme(aColor, true)"
-            @click.native="chgTheme(aColor)"
+            @click="chgTheme(aColor)"
           >
           </v-list-tile>
         </v-list>
