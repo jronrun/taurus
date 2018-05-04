@@ -33,13 +33,17 @@
         </v-btn>
         <v-list>
           <v-list-tile>
-            <v-switch
-              v-model="dark"
-              :dark="dark"
-              color="red darken-3"
-              hide-details
-            >
-            </v-switch>
+            <v-tooltip top>
+              <v-switch
+                slot="activator"
+                v-model="dark"
+                :dark="dark"
+                color="red darken-3"
+                hide-details
+              >
+              </v-switch>
+              <span>{{$t("Toggle Light & Dark Theme")}}</span>
+            </v-tooltip>
           </v-list-tile>
           <v-list-tile
             v-for="aColor in colors"
