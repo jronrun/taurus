@@ -67,6 +67,8 @@ Object.assign(core, {
   storeData: (key, value) => storeData(key, value)
 })
 
+//use instead: this.$vuetify.breakpoint.width
+/*
 core.viewport = () => {
   //https://stackoverflow.com/questions/1248081/get-the-browser-viewport-dimensions-with-javascript
   return {
@@ -74,5 +76,6 @@ core.viewport = () => {
     height: Math.max(document.documentElement.clientHeight, global.innerHeight || 0)
   }
 }
+ */
 
 export default core

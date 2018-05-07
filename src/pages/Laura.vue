@@ -61,6 +61,9 @@
           </v-list-tile>
         </v-list>
       </v-menu>
+      <v-btn icon>
+        <v-icon>more_vert</v-icon>
+      </v-btn>
     </v-toolbar>
 
     <v-navigation-drawer
@@ -92,7 +95,7 @@
       <v-list class="pt-0" dense>
         <v-divider>
         </v-divider>
-        <v-list-tile v-for="item in items" :key="item.title" @click="">
+        <v-list-tile v-for="item in []" :key="item.title" @click="">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -104,6 +107,23 @@
     </v-navigation-drawer>
 
     <v-content>
+
+      <v-container grid-list-md text-xs-center :style="style.container">
+        <v-layout  wrap :style="style.layout">
+          <v-flex xs12>
+            <v-card dark color="primary">
+              <v-card-text class="px-0">12</v-card-text>
+            </v-card>
+          </v-flex>
+          <v-flex xs6 v-for="i in 2" :key="`6${i}`">
+            <v-card dark color="secondary">
+              <v-card-text class="px-0">
+                6
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
 
     </v-content>
 
@@ -124,6 +144,16 @@
   export default {
     data() {
       return {
+        style: {
+          layout: {
+            margin: 0,
+            padding: 0
+          },
+          container: {
+            padding: 0,
+            margin: 0
+          }
+        },
         dark: false,
         theme: helper.theme(),
         drawerMini: false,
@@ -138,16 +168,17 @@
         if (true !== preview) {
           helper.locale(to)
         }
-        this.$i18n.locale = to;
+        this.$i18n.locale = to
       },
       chgTheme(to, preview = false) {
         if (true !== preview) {
           helper.theme(to)
         }
-        this.theme = to;
+        this.theme = to
       }
     },
     mounted() {
+      this.style.container['max-width'] = `${this.$vuetify.breakpoint.width}px`
     }
   }
 </script>

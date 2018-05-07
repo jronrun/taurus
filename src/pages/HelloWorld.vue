@@ -230,7 +230,7 @@
       'v-toolbar-ext': VToolbarExt
     },
     data: () => ({
-      rightWidth: global.helper.viewport().width / 2
+      rightWidth: this.$vuetify.breakpoint.width / 2
     }),
     computed: {
 
@@ -243,7 +243,7 @@
       let that = this;
       this.$nextTick(function() {
         window.addEventListener('resize', () => {
-          that.rightWidth = global.helper.viewport().width / 2;
+          that.rightWidth = this.$vuetify.breakpoint.width / 2;
         });
       });
     },
