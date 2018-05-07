@@ -164,6 +164,10 @@
       }
     },
     methods: {
+      setContainerWidth(setHalfWidth = false) {
+        let aContainerW = this.$vuetify.breakpoint.width / (setHalfWidth ? 2 : 1)
+        this.style.container['max-width'] = `${aContainerW}px`
+      },
       chgLocale(to, preview = false) {
         if (true !== preview) {
           helper.locale(to)
@@ -178,7 +182,7 @@
       }
     },
     mounted() {
-      this.style.container['max-width'] = `${this.$vuetify.breakpoint.width}px`
+      this.setContainerWidth()
     }
   }
 </script>
