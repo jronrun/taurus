@@ -1,5 +1,8 @@
 import lz from 'lz-string'
 
+import isNull from 'lodash/isNull'
+import isUndefined from 'lodash/isUndefined'
+
 const storage = global.localStorage
 let core = {}
 
@@ -28,11 +31,11 @@ const deepDecipher = (val) => {
 }
 
 const storeData = (key, value) => {
-  if (_.isUndefined(value)) {
+  if (isUndefined(value)) {
     return storage.getItem(key)
   }
 
-  if (_.isNull(value)) {
+  if (isNull(value)) {
     let v = storage.getItem(key)
     storage.removeItem(key)
     return v
@@ -44,11 +47,11 @@ const storeData = (key, value) => {
 
 const storeSign = (key, value) => {
   let cur = deepDecipher(storeData(key) || {})
-  if (_.isUndefined(value)) {
+  if (isUndefined(value)) {
     return cur
   }
 
-  if (_.isNull(value)) {
+  if (isNull(value)) {
     storeData(key, value)
     return cur;
   }
@@ -58,6 +61,11 @@ const storeSign = (key, value) => {
   return v
 }
 
+const lodashModules = {
+  isNull,
+  isUndefined
+}
+
 Object.assign(core, {
   sign: (target) => encipher(target),
   unsign: (target) => decipher(target),
@@ -65,7 +73,7 @@ Object.assign(core, {
 
   store: (key, value) => storeSign(key, value),
   storeData: (key, value) => storeData(key, value)
-})
+}, lodashModules)
 
 //use instead: this.$vuetify.breakpoint.width
 /*
