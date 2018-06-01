@@ -9,7 +9,7 @@
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer">
       </v-toolbar-side-icon>
-      <v-toolbar-title>{{$t("Home")}}</v-toolbar-title>
+      <v-toolbar-title>{{$t(" ")}}</v-toolbar-title>
       <v-spacer>
       </v-spacer>
       <v-menu offset-y>
@@ -108,18 +108,13 @@
 
     <v-content>
 
-      <v-container grid-list-md text-xs-center :style="style.container">
-        <v-layout  wrap :style="style.layout">
-          <v-flex xs12>
-            <v-card dark color="primary">
-              <v-card-text class="px-0">12</v-card-text>
-            </v-card>
-          </v-flex>
-          <v-flex xs6 v-for="i in 2" :key="`6${i}`">
-            <v-card dark color="secondary">
-              <v-card-text class="px-0">
-                6
-              </v-card-text>
+      <v-container fill-height :style="style.container">
+        <v-layout wrap :style="style.layout">
+          <v-flex xs12 :style="style.flex">
+            <v-card dark :style="style.card">
+              <codemirror :code="code">
+
+              </codemirror>
             </v-card>
           </v-flex>
         </v-layout>
@@ -140,10 +135,20 @@
 
 <script>
   import helper from '../helper'
+  import codemirror from '../components/Codemirror'
 
   export default {
+    components: {
+      codemirror
+    },
     data() {
+      const code = `
+      components: {
+        codemirror
+      }
+      `
       return {
+        code,
         style: {
           layout: {
             margin: 0,
@@ -152,6 +157,12 @@
           container: {
             padding: 0,
             margin: 0
+          },
+          flex: {
+            padding: 0
+          },
+          card: {
+            height: '100%'
           }
         },
         dark: false,

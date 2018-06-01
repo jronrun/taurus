@@ -10,10 +10,12 @@ Vue.config.productionTip = false
 import App from './App'
 import router from './router'
 
-import pi from './common/pi'
+import pi from './common/Pi'
 global.pi = pi
 
 import i18n from './i18n/'
+
+import http from './common/http'
 
 import Vuetify from 'vuetify'
 Vue.use(Vuetify)
@@ -27,6 +29,7 @@ new Vue({
   el: '#app',
   i18n,
   router,
+  http,
   components: { App },
   template: '<App/>',
 });

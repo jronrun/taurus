@@ -2,6 +2,21 @@ import lz from 'lz-string'
 
 import isNull from 'lodash/isNull'
 import isUndefined from 'lodash/isUndefined'
+import isString from 'lodash/isString'
+import isArray from 'lodash/isArray'
+import isFunction from 'lodash/isFunction'
+import uniqueId from 'lodash/uniqueId'
+import delay from 'lodash/delay'
+
+const lodashModules = {
+  isNull,
+  isUndefined,
+  isString,
+  isArray,
+  isFunction,
+  uniqueId,
+  delay
+}
 
 const storage = global.localStorage
 let core = {}
@@ -53,17 +68,12 @@ const storeSign = (key, value) => {
 
   if (isNull(value)) {
     storeData(key, value)
-    return cur;
+    return cur
   }
 
   let v = Object.assign({}, cur, value)
   storeData(key, encipher(v))
   return v
-}
-
-const lodashModules = {
-  isNull,
-  isUndefined
 }
 
 Object.assign(core, {
@@ -85,5 +95,58 @@ core.viewport = () => {
   }
 }
  */
+
+function appendToHead(elId = core.uniqueId('#head-el-'), definedEl) {
+  elId = /^#/.test(elId) ? elId : `#${elId}`
+  let existStyle = document.querySelector(elId)
+  if (existStyle) existStyle.remove()
+
+  definedEl.setAttribute('id', elId.substring(1))
+  document.querySelector('head').append(definedEl)
+}
+
+core.css = (style, styleId) => {
+  let link = document.createElement('link')
+  link.setAttribute('rel', 'stylesheet')
+  link.setAttribute('type', 'text/css')
+  link.setAttribute('href', style)
+  appendToHead(styleId, link)
+}
+
+core.script = (script, callback, scriptId) => {
+  let aScript = document.createElement('script')
+  aScript.setAttribute('type', 'text/javascript')
+
+  if (isFunction(callback)) {
+    if (aScript.readyState) {
+      aScript.onreadystatechange = function() {
+        if (aScript.readyState === "loaded" || aScript.readyState === "complete") {
+          aScript.onreadystatechange = null
+          callback()
+        }
+      }
+    } else {
+      aScript.onload = function() {
+        callback()
+      }
+    }
+  }
+
+  aScript.setAttribute('src', script)
+  appendToHead(scriptId, aScript)
+}
+
+core.fmtJSON = (target, space = 2) => {
+  return JSON.stringify(isString(target) ? JSON.parse(target) : target, false, space)
+}
+
+core.isJSON = (target) => {
+  try {
+    JSON.parse(isString(target) ? target : JSON.stringify(target))
+    return true
+  } catch(e) {
+    return false
+  }
+}
 
 export default core

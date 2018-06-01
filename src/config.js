@@ -23,7 +23,11 @@ const config = {
   locale: defaultLocale.value,
   colors,
   defaultColor,
-  url: baseUrl,
+  api: baseUrl,
+  //code mirror
+  mirror: {
+    basePath: 'https://cdn.bootcss.com/codemirror/5.38.0/'
+  },
   debug: {
     mock: true, // enable mock
     http: false // http request log
