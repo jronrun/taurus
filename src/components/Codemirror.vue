@@ -1,5 +1,5 @@
 <template>
-  <v-code-mirror v-model="code" @ready="onReady">
+  <v-code-mirror v-model="mirrorText" :options="mirrorOptions" @ready="onReady">
 
   </v-code-mirror>
 </template>
@@ -74,12 +74,22 @@
 
     data() {
       return {
-        instance: null
+        mirrorText: '',
+        instance: null,
+        mirrorOptions: {}
       }
     },
 
+    computed: {
+
+    },
+
     props: {
-      code: String
+      code: String,
+      options: {
+        type: Object,
+        default: () => ({})
+      },
     },
 
     methods: {
@@ -92,7 +102,26 @@ window.test = this.instance;
     },
 
     mounted() {
-
+      this.mirrorText = this.code
+      this.mirrorOptions = Object.assign({
+        autofocus: false,
+        lineNumbers: false,
+        matchBrackets: true,
+        theme: 'lemon',
+        styleActiveLine: false,
+        readOnly: false,
+        mode: 'text/x-markdown',
+        autoCloseBrackets: true,
+        autoCloseTags: true,
+        lineWrapping: true,
+        foldGutter: true,
+        content: '',
+        scrollbarStyle: 'null', //native
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        matchTags: {
+          bothTags: true
+        }
+      }, this.options)
     }
   }
 </script>

@@ -140,11 +140,14 @@ core.fmtJSON = (target, space = 2) => {
   return JSON.stringify(isString(target) ? JSON.parse(target) : target, false, space)
 }
 
-core.isJSON = (target) => {
+core.isJSON = (target, logMsgIfError = false) => {
   try {
     JSON.parse(isString(target) ? target : JSON.stringify(target))
     return true
   } catch(e) {
+    if (logMsgIfError) {
+      console && console.warn(`isJSON: ${e.message}`);
+    }
     return false
   }
 }

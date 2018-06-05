@@ -24,6 +24,8 @@ import 'vuetify/src/stylus/main.styl'
 import helper from "./helper";
 i18n.locale = helper.locale()
 
+import './styles/main.styl'
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

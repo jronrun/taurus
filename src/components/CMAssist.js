@@ -79,18 +79,80 @@ let getModeInfo = (lang = '') => {
   return null
 }
 
+let inputReadNotifyEvtHandle = null
+let inputReadNotifyEvt = 'inputReadNotifyEvt'
+let customEvts = ['fullscreen']
+
 class CMAssist {
 
   instance = null
   assistOptions
+  events
+  commands = []
 
-  constructor(instanceOfCodeMirror, assistOptions = {
+  constructor(instanceOfCodeMirror, events = {
+    onFullscreen: null
+  }, assistOptions = {
     basePath: global.config.mirror.basePath,
     thirdThemePath: ''
   }) {
     initializeModeInfo()
     this.instance = instanceOfCodeMirror
     this.assistOptions = assistOptions
+    this.events = Object.assign({
+      inputRead: (cm, changeObj) => {
+        this.format()
+      },
+
+      keyHandled(cm, keyName, event) {
+
+      }
+    }, events)
+
+    for (let [k, v] of Object.entries(this.events)) {
+      //CodeMirror event
+      if (customEvts.indexOf(k) === -1 && pi.isFunction(v)) {
+        if ('keyHandled' === k) {
+          this.instance.on(k, (cm, keyName, event) => {
+            v(cm, keyName, event)
+            if ('Backspace' === keyName && this.attrs(inputReadNotifyEvt)) {
+              this.notifyContent()
+            }
+          })
+        } else if ('inputRead' === k) {
+          this.instance.on(k, (cm, changeObj) => {
+            v(cm, changeObj)
+            if (this.attrs(inputReadNotifyEvt)) {
+              this.notifyContent()
+            }
+          })
+        } else {
+          this.instance.on(k, v)
+        }
+      }
+    }
+
+    /* [
+        "selectAll", "singleSelection", "killLine", "deleteLine", "delLineLeft", "delWrappedLineLeft", "delWrappedLineRight",
+        "undo", "redo", "undoSelection", "redoSelection", "goDocStart", "goDocEnd", "goLineStart", "goLineStartSmart",
+        "goLineEnd", "goLineRight", "goLineLeft", "goLineLeftSmart", "goLineUp", "goLineDown", "goPageUp", "goPageDown",
+        "goCharLeft", "goCharRight", "goColumnLeft", "goColumnRight", "goWordLeft", "goGroupRight", "goGroupLeft", "goWordRight",
+        "delCharBefore", "delCharAfter", "delWordBefore", "delWordAfter", "delGroupBefore", "delGroupAfter", "indentAuto",
+        "indentMore", "indentLess", "insertTab", "insertSoftTab", "defaultTab", "transposeChars", "newlineAndIndent",
+        "openLine", "toggleOverwrite", "toggleComment", "closeTag", "newlineAndIndentContinueMarkdownList", "toMatchingTag",
+        "toggleFold", "fold", "unfold", "foldAll", "unfoldAll", "autocomplete", "jumpToLine", "find", "findPersistent",
+        "findPersistentNext", "findPersistentPrev", "findNext", "findPrev", "clearSearch", "replace", "replaceAll",
+        "wrapLines", "goNextDiff", "goPrevDiff"
+      ] */
+
+    for (let k of Object.keys(CodeMirror.commands)) {
+      let commandM = {}
+      commandM[k] = () => {
+        return this.handleCmd(k)
+      }
+      Object.assign(this, commandM)
+      this.commands.push(k)
+    }
   }
 
   langInfo(lang) {
@@ -111,7 +173,8 @@ class CMAssist {
 
     if (!loadedTheme.includes(themeName)) {
       let themePath = this.isThirdTheme(themeName)
-        ? `${this.assistOptions.thirdThemePath}/${themeName}.css` : `${this.assistOptions.basePath}/theme/${themeName}.css`
+        ? `${this.assistOptions.thirdThemePath}/${themeName}.css`
+        : `${this.assistOptions.basePath}/theme/${themeName}.css`
       pi.css(themePath)
       loadedTheme.push(themeName)
     }
@@ -135,7 +198,7 @@ class CMAssist {
 
   refreshDelay(wait) {
     pi.delay((cm) => {
-      cm.refresh()
+      this.instance.refresh()
     }, wait || 100, this.instance)
   }
 
@@ -161,7 +224,7 @@ class CMAssist {
     return text
   }
 
-  replaceSelected (code, collapse, origin) {
+  replaceSelected(code, collapse, origin) {
     this.doc().replaceSelection(code, collapse, origin)
   }
 
@@ -241,12 +304,12 @@ class CMAssist {
     return info
   }
 
-  autoLoadMode (mode) {
+  autoLoadMode(mode) {
     let cm = this.instance
     let modeBasePath = this.assistOptions.basePath
 
     if (!pi.isFunction(CodeMirror.autoLoadMode)) {
-      pi.script(`${modeBasePath}/addon/mode/loadmode.js`, function () {
+      pi.script(`${modeBasePath}/addon/mode/loadmode.js`, () => {
         CodeMirror.modeURL = `${modeBasePath}/mode/%N/%N.js`
         CodeMirror.autoLoadMode(cm, mode)
       })
@@ -255,11 +318,250 @@ class CMAssist {
     }
   }
 
-  tip (msg, tipOptions) {
-    return this.instance.openNotification(`<span style="color: orange">${msg}</span>`, Object.assign({
+  tip(msg, tipOptions, tipTemplate = `<span style="color: orange">${msg}</span>`) {
+    return this.instance.openNotification(tipTemplate, Object.assign({
       bottom: true,
       duration: 5000
     }, tipOptions || {}))
+  }
+
+  //opt 1 toggle, 2 true, 3 false, 4 get
+  tglOption(optionKey, opt = 1) {
+    switch (opt) {
+      case 1:
+        this.attrs(optionKey, !this.attrs(optionKey))
+        break
+      case 2:
+        this.attrs(optionKey, true)
+        break
+      case 3:
+        this.attrs(optionKey, false)
+        break
+      case 4:
+        break
+    }
+
+    return this.attrs(optionKey)
+  }
+
+  wordwrap() {
+    return this.tglOption('lineWrapping')
+  }
+
+  elId() {
+    let theId = this.el().getAttribute('id')
+    if (!theId) {
+      theId = 'mirror_' + pi.uniqueId()
+      this.el().setAttribute('id', theId)
+    }
+
+    return '#' + theId
+  }
+
+  el() {
+    return this.instance.getWrapperElement()
+  }
+
+  mapkey(keymap = {}) {
+    this.instance.setOption("extraKeys", Object.assign(this.instance.getOption('extraKeys') || {}, keymap))
+  }
+
+  toLastLine() {
+    //this.instance.scrollIntoView({line: this.instance.lastLine()})
+    this.toLine(this.instance.lastLine() + 1)
+  }
+
+  toLine(line, ch) {
+    let aLines = this.visibleLines()
+    if (line > aLines.bottom) {
+      line = line + (aLines.bottom - aLines.top - 2)
+    }
+
+    this.instance.setCursor((line || 1) - 1, ch || 0)
+  }
+
+  scrollToLine(lineNo, mode) {
+    let coord = this.instance.charCoords({line: lineNo, ch: 0}, mode || 'local')
+    let scrollElArr = this.instance.getWrapperElement().getElementsByClassName('CodeMirror-scroll')
+    if (scrollElArr.length) {
+      scrollElArr[0].scrollTop = coord.top
+    }
+
+    //   $(this.instance.getWrapperElement()).find('.CodeMirror-scroll').stop(true).animate({
+    //     scrollTop: coord.top
+    //   }, 100, 'linear')
+  }
+
+  visibleLines(occludeToleranceTop = 0, occludeToleranceBottom = 0) {
+    let scrollInfo = this.instance.getScrollInfo()
+    let from = this.instance.coordsChar({left: 0, top: occludeToleranceTop + scrollInfo.top}, 'local')
+    let bottomY = scrollInfo.clientHeight - occludeToleranceBottom + scrollInfo.top
+    let to = this.instance.coordsChar({left: 0, top: bottomY}, 'local')
+    return {top: from.line + 1, bottom: to.line + 1}
+  }
+
+  //opt 1 toggle, 2 show, 3 unshow, 4 get
+  guttersTgl(opt = 1, options) {
+    let hasGutters = ((this.attrs('gutters') || []).length > 0)
+    switch (opt) {
+      case 1:
+        return this.guttersTgl(options, hasGutters ? 3 : 2)
+      case 2:
+        if (!hasGutters) {
+          options = Object.assign({
+            foldGutter: true,
+            lineNumbers: true,
+            gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
+          }, options || {})
+
+          this.attrs(options)
+        }
+        break
+      case 3:
+        if (hasGutters) {
+          options = Object.assign({
+            foldGutter: false,
+            lineNumbers: false,
+            gutters: []
+          }, options || {})
+
+          this.attrs(options)
+        }
+        break
+      case 4:
+        break
+    }
+
+    return (this.attrs('gutters') || []).length > 0
+  }
+
+  fullscreenTgl(full) {
+    if (!this.instance.getOption('fullScreen')) {
+      this.fullBefore = {
+        lineNumbers: this.instance.getOption('lineNumbers'),
+        styleActiveLine: this.instance.getOption('styleActiveLine')
+      }
+    }
+
+    let isFullscreen = null
+    this.instance.setOption("fullScreen", !full ? !this.instance.getOption("fullScreen") : full)
+    if (this.instance.getOption('fullScreen')) {
+      this.instance.setOption('lineNumbers', true)
+      this.instance.setOption('styleActiveLine', true)
+      isFullscreen = true
+    } else {
+      for (let [k, v] of Object.entries(this.fullBefore)) {
+        this.instance.setOption(k, v)
+      }
+      isFullscreen = false
+    }
+
+    pi.isFunction(this.events.onFullscreen) && this.events.onFullscreen(isFullscreen)
+    return isFullscreen
+  }
+
+  checkIsJson(text) {
+    if (!pi.isJSON(text || this.selected())) {
+      alert('The selected or content is not a valid json.')
+      return false
+    }
+
+    return true
+  }
+
+  isJSON(noneLogWarnMsg) {
+    return pi.isJSON(this.instance.getValue(), !noneLogWarnMsg)
+  }
+
+  // formatHandle(value, doneHandle(beautifyValue))
+  format(formatHandle, notUseDefaultJsonFormat) {
+    let cursor = this.instance.getCursor()
+    let targetValue = this.selected()
+    let isSelectedTxt = this.isSelected()
+
+    let aDoneHandle = (aValue) => {
+      if (isSelectedTxt) {
+        this.replaceSelected(aValue)
+      } else {
+        this.instance.setValue(aValue)
+      }
+
+      this.instance.setCursor(cursor)
+      this.refreshDelay()
+    }
+
+    if (!notUseDefaultJsonFormat && pi.isJSON(targetValue)) {
+      aDoneHandle(pi.fmtJSON(targetValue))
+    } else {
+      pi.isFunction(formatHandle) && formatHandle(targetValue, (beautifyValue) => {
+        aDoneHandle(beautifyValue)
+      }, isSelectedTxt)
+    }
+  }
+
+  linesInfo(mode = 'local') {
+    let cmLines = [], lc = this.instance.lineCount()
+    cmLines[0] = 0
+    for (let i = 1; i <= lc; i++) {
+      cmLines[i] = this.instance.charCoords({line: i, ch: 0}, mode)
+    }
+
+    return cmLines
+  }
+
+  getNotifyContent(customData = {}, evtName = 'MIRROR_INPUT_READ_NOTIFY') {
+    let cMode = this.mode(), mirrorData = {
+      event: evtName,
+      data: {
+        lang: {
+          name: cMode.name,
+          mime: cMode.chosenMimeOrExt || cMode.mime
+        },
+        th: this.theme(),
+        content: this.val()
+      }
+    }
+
+    mirrorData.data = Object.assign(customData, mirrorData.data)
+    return mirrorData
+  }
+
+  setNotifyContentHandle(handle) {
+    inputReadNotifyEvtHandle = handle
+  }
+
+  notifyContent(customData, evtName) {
+    pi.isFunction(inputReadNotifyEvtHandle)
+    && inputReadNotifyEvtHandle(this.getNotifyContent(customData, evtName))
+  }
+
+  inputReadNotifyTgl(opt) {
+    return this.tglOption(inputReadNotifyEvt, opt)
+  }
+
+  readonlyTgl(isNocursor) {
+    if (!isNocursor) {
+      return this.tglOption('readOnly')
+    } else {
+      return this.attrs('readOnly', 'nocursor')
+    }
+  }
+
+  chgFontSize(size) {
+    this.chgStyle({
+      'font-size': size + 'px'
+    })
+  }
+
+  chgStyle(styles = {}) {
+    for (let [k, v] of Object.entries(styles)) {
+      this.instance.getWrapperElement().style[k] = v
+    }
+    this.refreshDelay()
+  }
+
+  setSize(width, height) {
+    this.instance.setSize(width, height)
   }
 
 }
