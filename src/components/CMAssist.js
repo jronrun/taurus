@@ -159,10 +159,22 @@ class CMAssist {
     return getModeInfo(lang)
   }
 
-  isThirdTheme(target) {
+  isThirdTheme(target = this.theme()) {
     return thirdThemes.filter(item => {
       return item === target
     }).length > 0
+  }
+
+  isBlackBGTheme (target = this.theme()) {
+    let isBlackBG = false
+    for (let bbg of blackBGMark) {
+      if (target.includes(bbg)) {
+        isBlackBG = true
+        break
+      }
+    }
+
+    return isBlackBG
   }
 
   loadTheme(themeName) {
