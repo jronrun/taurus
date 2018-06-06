@@ -146,10 +146,27 @@ core.isJSON = (target, logMsgIfError = false) => {
     return true
   } catch(e) {
     if (logMsgIfError) {
-      console && console.warn(`isJSON: ${e.message}`);
+      console && console.warn(`isJSON: ${e.message}`)
     }
     return false
   }
+}
+
+core.querySelector = (selector, isAll = false, context = document) => {
+  return true === isAll ? context.querySelectorAll(selector) : context.querySelector(selector)
+}
+
+core.query = (selector, isAll = false, context = document) => {
+  if (/^[A-Za-z0-9]+$/.test(selector)) {
+    let results = core.querySelector(selector, isAll, context)
+    if (results === null) {
+      selector = `[name=${selector}]`
+    } else {
+      return results
+    }
+  }
+
+  return core.querySelector(selector, isAll, context)
 }
 
 export default core
