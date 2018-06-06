@@ -602,6 +602,12 @@ class CMAssist {
     this.instance.setSize(width, height)
   }
 
+  //<textarea id="code"></textarea><pre id="output" class="cm-s-default"><pre></div>
+  highlight(inputSelector, modeSpec, outputSelector) {
+    this.requireMode(modeSpec, (modeInfo) => {
+      CodeMirror.runMode(pi.query(inputSelector).value, modeInfo.mime, pi.query(outputSelector))
+    })
+  }
 }
 
 export default CMAssist
