@@ -111,7 +111,7 @@ class CMAssist {
 
     for (let [k, v] of Object.entries(this.events)) {
       //CodeMirror event
-      if (customEvts.indexOf(k) === -1 && pi.isFunction(v)) {
+      if (!customEvts.includes(k) && pi.isFunction(v)) {
         if ('keyHandled' === k) {
           this.instance.on(k, (cm, keyName, event) => {
             v(cm, keyName, event)
@@ -296,7 +296,7 @@ class CMAssist {
       this.attrs(cmeKey, optionalChosenMimeOrExt)
     } else {
       let curCME = this.attrs(cmeKey) || ''
-      if (info.theMimes.indexOf(curCME) === -1) {
+      if (!info.theMimes.includes(curCME)) {
         this.attrs(cmeKey, info.theMimes.length > 0 ? info.theMimes[0] : '')
       }
     }
