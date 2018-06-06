@@ -79,6 +79,17 @@ let getModeInfo = (lang = '') => {
   return null
 }
 
+let loadModeReady = (modeBasePath, callback) => {
+  if (pi.isFunction(CodeMirror.autoLoadMode)) {
+    pi.isFunction(callback) && callback()
+  } else {
+    pi.script(`${modeBasePath}/addon/mode/loadmode.js`, () => {
+      CodeMirror.modeURL = `${modeBasePath}/mode/%N/%N.js`
+      pi.isFunction(callback) && callback()
+    })
+  }
+}
+
 let inputReadNotifyEvtHandle = null
 let inputReadNotifyEvt = 'inputReadNotifyEvt'
 let customEvts = ['fullscreen']
@@ -165,7 +176,7 @@ class CMAssist {
     }).length > 0
   }
 
-  isBlackBGTheme (target = this.theme()) {
+  isBlackBGTheme(target = this.theme()) {
     let isBlackBG = false
     for (let bbg of blackBGMark) {
       if (target.includes(bbg)) {
@@ -177,7 +188,7 @@ class CMAssist {
     return isBlackBG
   }
 
-  loadTheme(themeName) {
+  requireTheme(themeName) {
     themeName = /^solarized/.test(themeName) ? 'solarized' : themeName
     if (!themes.includes(themeName)) {
       throw Error('Cound not find theme ' + themeName)
@@ -276,7 +287,7 @@ class CMAssist {
       return this.attrs('theme')
     }
 
-    th = this.loadTheme(th)
+    th = this.requireTheme(th)
     this.attrs('theme', th)
     return th
   }
@@ -318,16 +329,31 @@ class CMAssist {
 
   autoLoadMode(mode) {
     let cm = this.instance
-    let modeBasePath = this.assistOptions.basePath
-
-    if (!pi.isFunction(CodeMirror.autoLoadMode)) {
-      pi.script(`${modeBasePath}/addon/mode/loadmode.js`, () => {
-        CodeMirror.modeURL = `${modeBasePath}/mode/%N/%N.js`
-        CodeMirror.autoLoadMode(cm, mode)
-      })
-    } else {
+    loadModeReady(this.assistOptions.basePath, () => {
       CodeMirror.autoLoadMode(cm, mode)
+    })
+  }
+
+  requireMode(mode, callback) {
+    let aLangInfo = this.langInfo(mode)
+    if (null == aLangInfo) {
+      console && console.warn(`requireMode ignored. invalid mode ${mode}`)
+      return
     }
+
+    let reqM = function (aMode) {
+      if (!pi.has(CodeMirror.modes, aMode)) {
+        CodeMirror.requireMode(aMode, function () {
+          pi.isFunction(callback) && callback(aLangInfo)
+        })
+      } else {
+        pi.isFunction(callback) && callback(aLangInfo)
+      }
+    }
+
+    loadModeReady(this.assistOptions.basePath, () => {
+      reqM(aLangInfo.mode)
+    })
   }
 
   tip(msg, tipOptions, tipTemplate = `<span style="color: orange">${msg}</span>`) {

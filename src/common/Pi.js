@@ -7,6 +7,7 @@ import isArray from 'lodash/isArray'
 import isFunction from 'lodash/isFunction'
 import uniqueId from 'lodash/uniqueId'
 import delay from 'lodash/delay'
+import has from 'lodash/has'
 
 const lodashModules = {
   isNull,
@@ -15,7 +16,8 @@ const lodashModules = {
   isArray,
   isFunction,
   uniqueId,
-  delay
+  delay,
+  has
 }
 
 const storage = global.localStorage
