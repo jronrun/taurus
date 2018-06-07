@@ -21,6 +21,11 @@ const blackBGMark = [
   'dark', 'night', 'black', 'abcdef'
 ]
 
+const highlightTemplate = `
+  <textarea style="display: none;" id="hl_src_${id}"></textarea>
+  <div id="hl_ctx_${id}" style="display: none;"><pre id="hl_pre_${id}" class="CodeMirror cm-s-${theme}"></pre></div>
+`
+
 let initializeModeInfo = () => {
   let {modeInfo} = CodeMirror
   if (modeInfo.length > 0 && (modeInfo[0].id || 0) > 0) {
@@ -602,7 +607,6 @@ class CMAssist {
     this.instance.setSize(width, height)
   }
 
-  //<textarea id="code"></textarea><pre id="output" class="cm-s-default"><pre></div>
   highlight(inputSelector, modeSpec, outputSelector) {
     this.requireMode(modeSpec, (modeInfo) => {
       CodeMirror.runMode(pi.query(inputSelector).value, modeInfo.mime, pi.query(outputSelector))
