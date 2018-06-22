@@ -407,7 +407,37 @@ class CMAssist {
     return this.instance.getWrapperElement()
   }
 
-  mapkey(keymap = {}) {
+  mapPredefineKeys() {
+    let predefineKeys = {
+      Esc: 'fullscreenTgl',
+      'Ctrl-L':'guttersTgl'
+    }
+
+    pi.delay(() => {
+      this.mapKeys(predefineKeys)
+    }, 300)
+  }
+
+  mapKeys(keymap = {}) {
+    let custKeys = {}
+    let thiz = this
+
+    for (let [k, v] of Object.entries(keymap)) {
+      if (pi.isString(v)) {
+        custKeys[k] = (cm) => {
+          return thiz[v]()
+        }
+       } else if (pi.isFunction(v)) {
+        custKeys[k] = (cm) => {
+          return v()
+        }
+      }
+    }
+
+    this.extraKeys(custKeys)
+  }
+
+  extraKeys(keymap = {}) {
     this.instance.setOption("extraKeys", Object.assign(this.instance.getOption('extraKeys') || {}, keymap))
   }
 

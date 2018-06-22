@@ -170,8 +170,10 @@
     },
     methods: {
       onReady(mirror) {
-        let offsetH = this.$vuetify.breakpoint.height - this.$refs.header.computedHeight
-        mirror.setSize(null, offsetH)
+        let mirrorH = this.$vuetify.breakpoint.height - this.$refs.header.computedHeight
+        mirror.setSize(null, mirrorH)
+        mirror.chgStyle({padding: '8px'})
+        mirror.mapPredefineKeys()
 
         //TODO rem
         window.mirror=mirror

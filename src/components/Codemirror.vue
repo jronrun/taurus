@@ -118,9 +118,15 @@
         foldGutter: true,
         content: '',
         scrollbarStyle: 'null', //native
-        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        gutters: [],
         matchTags: {
           bothTags: true
+        },
+        extraKeys: {
+          //http://codemirror.net/doc/manual.html#commands
+          'Ctrl-K': 'toMatchingTag',
+          'Ctrl-J': 'autocomplete',
+          'Ctrl-Q': 'toggleFold'
         }
       }, this.options)
     }
