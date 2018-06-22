@@ -623,15 +623,19 @@ class CMAssist {
       mode = 'text',
       theme = 'default'
     } = {}) {
+
     let hlId = pi.uniqueId('highlighted-')
     let hlSrcId = `#hl_src_${hlId}`
     let hlCtxId = `#hl_ctx_${hlId}`
     let hlPreId = `#hl_pre_${hlId}`
+
     let div = document.createElement('div')
     div.setAttribute('id', hlId)
     div.innerHTML = highlightTemplate({id: hlId, theme: theme})
+
     pi.query('body').append(div)
     pi.query(hlSrcId).value = inputIsElement ? pi.query(input).value : input
+
     this.highlight(hlSrcId, mode, hlPreId, (modeInfo) => {
       let theOutput = pi.query(hlCtxId).innerHTML
       pi.query(`#${hlId}`).remove()
