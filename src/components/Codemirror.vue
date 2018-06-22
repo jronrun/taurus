@@ -129,6 +129,8 @@
 
 <!--
   usage:
+  <codemirror @ready="onReady">
+  </codemirror>
 
   import codemirror from '../components/Codemirror'
   export default {
