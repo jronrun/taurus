@@ -6,6 +6,7 @@
       fixed
       app
       clipped-right
+      ref="header"
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer">
       </v-toolbar-side-icon>
@@ -112,8 +113,7 @@
         <v-layout wrap :style="style.layout">
           <v-flex xs12 :style="style.flex">
             <v-card dark :style="style.card">
-              <codemirror :code="code">
-
+              <codemirror @ready="onReady">
               </codemirror>
             </v-card>
           </v-flex>
@@ -142,13 +142,7 @@
       codemirror
     },
     data() {
-      const code = `
-      components: {
-        codemirror
-      }
-      `
       return {
-        code,
         style: {
           layout: {
             margin: 0,
@@ -175,6 +169,13 @@
       }
     },
     methods: {
+      onReady(mirror) {
+        let offsetH = this.$vuetify.breakpoint.height - this.$refs.header.computedHeight
+        mirror.setSize(null, offsetH)
+
+        //TODO rem
+        window.mirror=mirror
+      },
       setContainerWidth(setHalfWidth = false) {
         let aContainerW = this.$vuetify.breakpoint.width / (setHalfWidth ? 2 : 1)
         this.style.container['max-width'] = `${aContainerW}px`

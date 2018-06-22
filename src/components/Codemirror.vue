@@ -85,7 +85,10 @@
     },
 
     props: {
-      code: String,
+      code: {
+        type: String,
+        default: ''
+      },
       options: {
         type: Object,
         default: () => ({})
@@ -94,10 +97,8 @@
 
     methods: {
       onReady(cm) {
-        this.instance = new CMAssist(cm);
-
-        //TODO rem
-window.test = this.instance;
+        this.instance = new CMAssist(cm)
+        this.$emit('ready', this.instance)
       }
     },
 
@@ -125,3 +126,25 @@ window.test = this.instance;
     }
   }
 </script>
+
+<!--
+  usage:
+
+  import codemirror from '../components/Codemirror'
+  export default {
+    components: {
+      codemirror
+    },
+    data() {
+      return {
+      }
+    },
+    methods: {
+      onReady(mirror) {
+
+      }
+    },
+    mounted() {
+    }
+  }
+-->
