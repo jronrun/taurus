@@ -26,7 +26,7 @@ const config = {
   api: baseUrl,
   //code mirror
   mirror: {
-    basePath: 'https://cdn.bootcss.com/codemirror/5.38.0/'
+    basePath: 'https://cdn.bootcss.com/codemirror/5.38.0'
   },
   debug: {
     mock: true, // enable mock

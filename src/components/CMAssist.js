@@ -21,9 +21,11 @@ const blackBGMark = [
   'dark', 'night', 'black', 'abcdef'
 ]
 
-const highlightTemplate = `
+const highlightTemplate = ({id, theme} = {}) => `
   <textarea style="display: none;" id="hl_src_${id}"></textarea>
-  <div id="hl_ctx_${id}" style="display: none;"><pre id="hl_pre_${id}" class="CodeMirror cm-s-${theme}"></pre></div>
+  <div id="hl_ctx_${id}" style="display: none;">
+    <pre id="hl_pre_${id}" class="CodeMirror cm-s-${theme}"></pre>
+  </div>
 `
 
 let initializeModeInfo = () => {
@@ -607,9 +609,33 @@ class CMAssist {
     this.instance.setSize(width, height)
   }
 
-  highlight(inputSelector, modeSpec, outputSelector) {
+  highlight(inputSelector, modeSpec, outputSelector, callback) {
     this.requireMode(modeSpec, (modeInfo) => {
       CodeMirror.runMode(pi.query(inputSelector).value, modeInfo.mime, pi.query(outputSelector))
+      pi.isFunction(callback) && callback(modeInfo)
+    })
+  }
+
+  highlights({
+      input = '',
+      inputIsElement = false,
+      callback = (result) => {},
+      mode = 'text',
+      theme = 'default'
+    } = {}) {
+    let hlId = pi.uniqueId('highlighted-')
+    let hlSrcId = `#hl_src_${hlId}`
+    let hlCtxId = `#hl_ctx_${hlId}`
+    let hlPreId = `#hl_pre_${hlId}`
+    let div = document.createElement('div')
+    div.setAttribute('id', hlId)
+    div.innerHTML = highlightTemplate({id: hlId, theme: theme})
+    pi.query('body').append(div)
+    pi.query(hlSrcId).value = inputIsElement ? pi.query(input).value : input
+    this.highlight(hlSrcId, mode, hlPreId, (modeInfo) => {
+      let theOutput = pi.query(hlCtxId).innerHTML
+      pi.query(`#${hlId}`).remove()
+      pi.isFunction(callback) && callback(theOutput, modeInfo, theme);
     })
   }
 }
