@@ -143,6 +143,7 @@
     },
     data() {
       return {
+        instance: null,
         style: {
           layout: {
             margin: 0,
@@ -174,6 +175,7 @@
         mirror.setSize(null, mirrorH)
         mirror.chgStyle({padding: '8px'})
         mirror.mapPredefineKeys()
+        this.instance = mirror
 
         //TODO rem
         window.mirror=mirror
@@ -193,10 +195,21 @@
           helper.theme(to)
         }
         this.theme = to
+      },
+
+      initRestore() {
+        let that = this
+        let restoreKey = 'mirror_restore_data'
+        this.instance.state(pi.store(restoreKey))
+
+        window.onbeforeunload = function(){
+          pi.store(restoreKey, that.instance.state())
+        }
       }
     },
     mounted() {
       this.setContainerWidth()
+      this.initRestore()
     }
   }
 </script>

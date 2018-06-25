@@ -420,12 +420,12 @@ class CMAssist {
 
   mapKeys(keymap = {}) {
     let custKeys = {}
-    let thiz = this
+    let that = this
 
     for (let [k, v] of Object.entries(keymap)) {
       if (pi.isString(v)) {
         custKeys[k] = (cm) => {
-          return thiz[v]()
+          return that[v]()
         }
        } else if (pi.isFunction(v)) {
         custKeys[k] = (cm) => {
@@ -584,17 +584,35 @@ class CMAssist {
     return cmLines
   }
 
+  state({mode /* {name: '', mime: ''} */, theme, content} = {}) {
+    if (pi.isJSON(mode)) {
+      let {name, mime} = mode
+      this.mode(name, mime)
+    }
+
+    if (!pi.isUndefined(theme)) {
+      this.theme(theme)
+    }
+
+    if (!pi.isUndefined(content)) {
+      this.val(content)
+    }
+
+    let cMode = this.mode()
+    return {
+      mode: {
+        name: cMode.name,
+        mime: cMode.chosenMimeOrExt || cMode.mime
+      },
+      theme: this.theme(),
+      content: this.val()
+    }
+  }
+
   getNotifyContent(customData = {}, evtName = 'MIRROR_INPUT_READ_NOTIFY') {
-    let cMode = this.mode(), mirrorData = {
+    let mirrorData = {
       event: evtName,
-      data: {
-        lang: {
-          name: cMode.name,
-          mime: cMode.chosenMimeOrExt || cMode.mime
-        },
-        th: this.theme(),
-        content: this.val()
-      }
+      data: this.state()
     }
 
     mirrorData.data = Object.assign(customData, mirrorData.data)
