@@ -16,7 +16,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "axios-mock-adapter": "^1.15.0",
-    "codemirror": "^5.38.0",
+    "codemirror": "^5.39.0",
     "font-awesome": "^4.7.0",
     "i": "^0.3.6",
     "lodash": "^4.17.10",

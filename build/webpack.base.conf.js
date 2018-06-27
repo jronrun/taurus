@@ -36,6 +36,7 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      htmlhint: 'codemirror/addon/hint/html-hint.js'
     }
   },
   module: {

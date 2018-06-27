@@ -113,8 +113,8 @@
         <v-layout wrap :style="style.layout">
           <v-flex xs12 :style="style.flex">
             <v-card dark :style="style.card">
-              <codemirror @ready="onReady">
-              </codemirror>
+              <notemirror @ready="onReady">
+              </notemirror>
             </v-card>
           </v-flex>
         </v-layout>
@@ -135,11 +135,11 @@
 
 <script>
   import helper from '../helper'
-  import codemirror from '../components/Codemirror'
+  import notemirror from '../components/Notemirror'
 
   export default {
     components: {
-      codemirror
+      notemirror
     },
     data() {
       return {

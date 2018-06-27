@@ -1,6 +1,5 @@
 <template>
-  <v-code-mirror v-model="mirrorText" :options="mirrorOptions" @ready="onReady">
-
+  <v-code-mirror v-model="mirrorText" :options="mirrorOptions" :merge="mirrorMerge" @ready="onReady">
   </v-code-mirror>
 </template>
 
@@ -76,6 +75,7 @@
       return {
         mirrorText: '',
         instance: null,
+        mirrorMerge: false,
         mirrorOptions: {}
       }
     },
@@ -93,6 +93,10 @@
         type: Object,
         default: () => ({})
       },
+      merge: {
+        type: Boolean,
+        default: false
+      }
     },
 
     methods: {
@@ -104,6 +108,7 @@
 
     mounted() {
       this.mirrorText = this.code
+      this.mirrorMerge = this.merge
       this.mirrorOptions = Object.assign({
         autofocus: false,
         lineNumbers: false,
