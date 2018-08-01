@@ -111,6 +111,21 @@
     },
 
     beforeMount() {
+      console.log(JSON.stringify(this.options.extraKeys))
+      console.log(JSON.stringify(Object.assign({
+        //http://codemirror.net/doc/manual.html#commands
+        'Ctrl-K': 'toMatchingTag',
+        'Ctrl-J': 'autocomplete',
+        'Ctrl-Q': 'toggleFold'
+      }, this.options.extraKeys || {})))
+
+      let extraKeys = Object.assign({
+        //http://codemirror.net/doc/manual.html#commands
+        'Ctrl-K': 'toMatchingTag',
+        'Ctrl-J': 'autocomplete',
+        'Ctrl-Q': 'toggleFold'
+      }, this.options.extraKeys || {})
+
       this.mirrorText = this.code
       this.mirrorMerge = this.merge
       this.mirrorOptions = Object.assign({
@@ -130,14 +145,10 @@
         gutters: [],
         matchTags: {
           bothTags: true
-        },
-        extraKeys: {
-          //http://codemirror.net/doc/manual.html#commands
-          'Ctrl-K': 'toMatchingTag',
-          'Ctrl-J': 'autocomplete',
-          'Ctrl-Q': 'toggleFold'
         }
-      }, this.options)
+      }, this.options, {
+        extraKeys: extraKeys
+      })
     }
   }
 </script>

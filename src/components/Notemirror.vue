@@ -71,28 +71,28 @@
     },
 
     beforeMount() {
+      let extraKeys = Object.assign({
+        //http://codemirror.net/doc/manual.html#commands
+        "Ctrl-/": 'toggleComment',
+        "Ctrl-A": 'selectAll'
+      }, this.options.extraKeys || {})
+
       this.noteText = this.code
       this.noteMerge = this.merge
       this.noteOptions = Object.assign({
         mode: 'markdown',
         keyMap: 'vim',
-        fullScreen: true,
+        fullScreen: false,
         autofocus: true,
         lineNumbers: true,
         lineNumberFormatter: (line) => {
           return 1 === line ? '' : line
         },
         showCursorWhenSelecting: true,
-        styleActiveLine: true,
-        extraKeys: {
-          //http://codemirror.net/doc/manual.html#commands
-          'Ctrl-K': 'toMatchingTag',
-          'Ctrl-J': 'autocomplete',
-          'Ctrl-Q': 'toggleFold',
-          "Ctrl-/": 'toggleComment',
-          "Ctrl-A": 'selectAll'
-        }
-      }, this.options)
+        styleActiveLine: true
+      }, this.options, {
+        extraKeys: extraKeys
+      })
     }
   }
 

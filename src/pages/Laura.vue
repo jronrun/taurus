@@ -143,7 +143,7 @@
     },
     data() {
       return {
-        note: '.note',
+        note: '.md',
         instance: null,
         style: {
           layout: {
