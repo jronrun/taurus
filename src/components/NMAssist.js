@@ -2,7 +2,7 @@ import CMAssist from '../components/CMAssist'
 
 const definedEx = []
 
-let defineEx = (cmd, exHandle, desc = '', shortCmd) => {
+let doDefineEx = (cmd, exHandle, desc = '', shortCmd) => {
   if (!cmd || !pi.isFunction(exHandle)) {
     return definedEx
   }
@@ -14,7 +14,7 @@ let defineEx = (cmd, exHandle, desc = '', shortCmd) => {
     shortCmd: shortCmd || cmd
   }
 
-  CodeMirror.Vim.defineEx(exBody.cmd, exBody.shortCmd, (cm, params) => {
+  NMAssist.defineEx(exBody.cmd, exBody.shortCmd, (cm, params) => {
     params = Object.assign({
       args: [],
       argString: '',
@@ -35,14 +35,56 @@ let defineEx = (cmd, exHandle, desc = '', shortCmd) => {
   })
 
   definedEx.push(exBody)
+  return definedEx
 }
 
-class NMAssist extends CMAssist{
+class NMAssist extends CMAssist {
+  instance = null
 
   constructor(instanceOfCodeMirror, events = {}, assistOptions = {}) {
-    super(instanceOfCodeMirror, events, assistOptions);
+    super(instanceOfCodeMirror, Object.assign({
+      inputRead: function (cm, changeObj) {
+      }
+    }, events), assistOptions)
+
+    this.instance = instanceOfCodeMirror
   }
 
+  static defineEx(cmd, exHandle, desc = '', shortCmd) {
+    return doDefineEx(cmd, exHandle, desc, shortCmd)
+  }
+
+  visualMode() {
+    return CodeMirror.Vim.exitInsertMode(this.instance)
+  }
+
+  editMode() {
+    return this.handleVimKey('i')
+  }
+
+  handleVimEx(input) {
+    return CodeMirror.Vim.handleEx(this.instance, input)
+  }
+
+  handleVimKey(input, origin) {
+    return CodeMirror.Vim.handleKey(this.instance, input, origin)
+  }
+
+  joinLine(startLine = 0, endLine) {
+    let start = startLine
+    let end = endLine || this.instance.lineCount()
+    let cursor = this.instance.getCursor()
+
+    let tmpCursor = pi.clone(cursor)
+    tmpCursor.line = start
+    this.instance.setCursor(tmpCursor)
+
+    for (let idx = start; idx < end; idx++) {
+      this.handleVimKey('J')
+    }
+
+    this.instance.setCursor(cursor)
+  }
 }
 
 export default NMAssist

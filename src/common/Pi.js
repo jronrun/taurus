@@ -8,6 +8,7 @@ import isFunction from 'lodash/isFunction'
 import uniqueId from 'lodash/uniqueId'
 import delay from 'lodash/delay'
 import has from 'lodash/has'
+import clone from 'lodash/clone'
 
 const lodashModules = {
   isNull,
@@ -17,7 +18,8 @@ const lodashModules = {
   isFunction,
   uniqueId,
   delay,
-  has
+  has,
+  clone
 }
 
 const storage = global.localStorage
