@@ -113,21 +113,25 @@ class CMAssist {
   events
   commands = []
 
-  constructor(instanceOfCodeMirror, events = {
-    onFullscreen: null
-  }, assistOptions = {
-    basePath: global.config.mirror.basePath,
-    thirdThemePath: ''
-  }) {
+  constructor(instanceOfCodeMirror, events = {}, assistOptions = {}) {
     initializeModeInfo()
     this.instance = instanceOfCodeMirror
-    this.assistOptions = assistOptions
+
+    this.assistOptions = Object.assign({
+      basePath: global.config.mirror.basePath,
+      thirdThemePath: ''
+    }, assistOptions)
+
     this.events = Object.assign({
       inputRead: (cm, changeObj) => {
         this.format()
       },
 
       keyHandled(cm, keyName, event) {
+
+      },
+
+      onFullscreen: function (isFullscreen) {
 
       }
     }, events)

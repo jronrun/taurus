@@ -56,12 +56,21 @@
       merge: {
         type: Boolean,
         default: false
+      },
+
+      assistOptions: {
+        type: Object,
+        default: () => ({})
+      },
+      assistEvents: {
+        type: Object,
+        default: () => ({})
       }
     },
 
     methods: {
       onReady(codeMirrorWrap) {
-        this.instance = new NMAssist(codeMirrorWrap.instance)
+        this.instance = new NMAssist(codeMirrorWrap.instance, this.assistEvents, this.assistOptions)
         this.$emit('ready', this.instance)
       }
     },

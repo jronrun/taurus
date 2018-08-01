@@ -96,12 +96,21 @@
       merge: {
         type: Boolean,
         default: false
+      },
+
+      assistOptions: {
+        type: Object,
+        default: () => ({})
+      },
+      assistEvents: {
+        type: Object,
+        default: () => ({})
       }
     },
 
     methods: {
       onReady(cm) {
-        this.instance = new CMAssist(cm)
+        this.instance = new CMAssist(cm, this.assistEvents, this.assistOptions)
         this.$emit('ready', this.instance)
       }
     },

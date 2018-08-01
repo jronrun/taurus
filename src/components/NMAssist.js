@@ -39,8 +39,8 @@ let defineEx = (cmd, exHandle, desc = '', shortCmd) => {
 
 class NMAssist extends CMAssist{
 
-  constructor(instanceOfCodeMirror) {
-    super(instanceOfCodeMirror);
+  constructor(instanceOfCodeMirror, events = {}, assistOptions = {}) {
+    super(instanceOfCodeMirror, events, assistOptions);
   }
 
 }
