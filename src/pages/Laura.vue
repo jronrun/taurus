@@ -176,7 +176,7 @@
         mirror.setSize(null, mirrorH)
         mirror.chgStyle({padding: '8px'})
         mirror.mapPredefineKeys({
-          Esc: false
+          Esc: 'Ctrl-Esc'
         })
         this.instance = mirror
 

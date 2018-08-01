@@ -415,10 +415,14 @@ class CMAssist {
   mapPredefineKeys(enablePredefineKeys = {}) {
     let keyActions = {}
     for (let [key, act] of Object.entries(predefineKeyActions)) {
-      let anAct = enablePredefineKeys[key]
+      let keyMapValue = enablePredefineKeys[key]
       // default is enable or enable explicit by true value
-      if (pi.isUndefined(anAct) || true === anAct) {
+      if (pi.isUndefined(keyMapValue) || true === keyMapValue) {
         keyActions[key] = act
+      }
+      // change default key to the given value
+      else if (pi.isString(keyMapValue)) {
+        keyActions[keyMapValue] = act
       }
     }
 
