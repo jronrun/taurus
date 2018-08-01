@@ -113,7 +113,7 @@
         <v-layout wrap :style="style.layout">
           <v-flex xs12 :style="style.flex">
             <v-card dark :style="style.card">
-              <notemirror @ready="onReady">
+              <notemirror @ready="onReady" :code="note">
               </notemirror>
             </v-card>
           </v-flex>
@@ -143,6 +143,7 @@
     },
     data() {
       return {
+        note: '.note',
         instance: null,
         style: {
           layout: {

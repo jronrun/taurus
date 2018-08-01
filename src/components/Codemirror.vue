@@ -107,6 +107,10 @@
     },
 
     mounted() {
+
+    },
+
+    beforeMount() {
       this.mirrorText = this.code
       this.mirrorMerge = this.merge
       this.mirrorOptions = Object.assign({

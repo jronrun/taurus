@@ -1,5 +1,5 @@
 <template>
-  <v-code-mirror-wrap @ready="onReady">
+  <v-code-mirror-wrap :code="noteText" @ready="onReady" :options="noteOptions" :merge="noteMerge">
   </v-code-mirror-wrap>
 </template>
 
@@ -24,6 +24,8 @@
 
   import 'codemirror/keymap/vim'
 
+  import NMAssist from '../components/NMAssist'
+
   export default {
     components: {
       'v-code-mirror-wrap': CodeMirrorWrap
@@ -32,6 +34,9 @@
     data() {
       return {
         instance: null,
+        noteText: '',
+        noteMerge: false,
+        noteOptions: {}
       }
     },
 
@@ -40,16 +45,54 @@
     },
 
     props: {
+      code: {
+        type: String,
+        default: ''
+      },
+      options: {
+        type: Object,
+        default: () => ({})
+      },
+      merge: {
+        type: Boolean,
+        default: false
+      }
     },
 
     methods: {
       onReady(codeMirrorWrap) {
-        this.instance = codeMirrorWrap
-        this.$emit('ready', codeMirrorWrap)
+        this.instance = new NMAssist(codeMirrorWrap.instance)
+        this.$emit('ready', this.instance)
       }
     },
 
     mounted() {
+
+    },
+
+    beforeMount() {
+      this.noteText = this.code
+      this.noteMerge = this.merge
+      this.noteOptions = Object.assign({
+        mode: 'markdown',
+        keyMap: 'vim',
+        fullScreen: true,
+        autofocus: true,
+        lineNumbers: true,
+        lineNumberFormatter: (line) => {
+          return 1 === line ? '' : line
+        },
+        showCursorWhenSelecting: true,
+        styleActiveLine: true,
+        extraKeys: {
+          //http://codemirror.net/doc/manual.html#commands
+          'Ctrl-K': 'toMatchingTag',
+          'Ctrl-J': 'autocomplete',
+          'Ctrl-Q': 'toggleFold',
+          "Ctrl-/": 'toggleComment',
+          "Ctrl-A": 'selectAll'
+        }
+      }, this.options)
     }
   }
 
