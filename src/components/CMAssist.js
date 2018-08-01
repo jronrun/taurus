@@ -412,6 +412,16 @@ class CMAssist {
     return this.instance.getWrapperElement()
   }
 
+  /**
+   * Enable default key action, enable all predefine keys if no argument.</br>
+   * <pre>
+   * {
+   *  Esc: false, // disable Esc key
+   *  Esc: 'Ctrl-Esc' // map Esc key to 'Ctrl-Esc'
+   * }
+   * </pre>
+   * @see predefineKeyActions
+   */
   mapPredefineKeys(enablePredefineKeys = {}) {
     let keyActions = {}
     for (let [key, act] of Object.entries(predefineKeyActions)) {
