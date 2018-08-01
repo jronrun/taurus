@@ -175,7 +175,9 @@
         let mirrorH = this.$vuetify.breakpoint.height - this.$refs.header.computedHeight
         mirror.setSize(null, mirrorH)
         mirror.chgStyle({padding: '8px'})
-        mirror.mapPredefineKeys()
+        mirror.mapPredefineKeys({
+          Esc: false
+        })
         this.instance = mirror
 
         //TODO rem

@@ -101,6 +101,11 @@ let inputReadNotifyEvtHandle = null
 let inputReadNotifyEvt = 'inputReadNotifyEvt'
 let customEvts = ['fullscreen']
 
+const predefineKeyActions = {
+  Esc: 'fullscreenTgl',
+  'Ctrl-L':'guttersTgl'
+}
+
 class CMAssist {
 
   instance = null
@@ -407,14 +412,18 @@ class CMAssist {
     return this.instance.getWrapperElement()
   }
 
-  mapPredefineKeys() {
-    let predefineKeys = {
-      Esc: 'fullscreenTgl',
-      'Ctrl-L':'guttersTgl'
+  mapPredefineKeys(enablePredefineKeys = {}) {
+    let keyActions = {}
+    for (let [key, act] of Object.entries(predefineKeyActions)) {
+      let anAct = enablePredefineKeys[key]
+      // default is enable or enable explicit by true value
+      if (pi.isUndefined(anAct) || true === anAct) {
+        keyActions[key] = act
+      }
     }
 
     pi.delay(() => {
-      this.mapKeys(predefineKeys)
+      this.mapKeys(keyActions)
     }, 300)
   }
 
