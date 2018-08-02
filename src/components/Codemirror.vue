@@ -5,8 +5,6 @@
 
 <script>
   import CodeMirror from 'codemirror/lib/codemirror'
-  global.CodeMirror = CodeMirror
-
   import 'codemirror/lib/codemirror.css'
 
   import 'codemirror/addon/comment/comment'
@@ -63,8 +61,22 @@
   import 'codemirror/mode/meta'
   import 'codemirror/mode/javascript/javascript'
 
-  import { codemirror } from 'vue-codemirror'
+  import 'codemirror/addon/merge/merge.css'
+  import 'codemirror/addon/merge/merge'
+
+  // Google DiffMaGtchPatch
+  import DiffMatchPatch from 'diff-match-patch'
+
+  import {codemirror} from 'vue-codemirror'
   import CMAssist from '../components/CMAssist'
+
+  global.CodeMirror = CodeMirror
+
+  // DiffMatchPatch config with global
+  global.diff_match_patch = DiffMatchPatch
+  global.DIFF_DELETE = -1
+  global.DIFF_INSERT = 1
+  global.DIFF_EQUAL = 0
 
   export default {
     components: {
