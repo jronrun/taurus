@@ -138,7 +138,7 @@ class CMAssist {
 
     for (let [k, v] of Object.entries(this.events)) {
       //CodeMirror event
-      if (!customEvts.includes(k) && pi.isFunction(v)) {
+      if (!customEvts.includes(k) && pi.isFunction(v) && pi.isFunction(this.instance.on)) {
         if ('keyHandled' === k) {
           this.instance.on(k, (cm, keyName, event) => {
             v(cm, keyName, event)
