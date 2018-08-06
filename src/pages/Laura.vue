@@ -205,7 +205,7 @@
         let restoreKey = 'mirror_restore_data'
         this.instance.state(pi.store(restoreKey))
 
-        window.onbeforeunload = function(){
+        window.onbeforeunload = () => {
           pi.store(restoreKey, that.instance.state())
         }
       }

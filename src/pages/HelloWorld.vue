@@ -241,7 +241,7 @@
     mounted() {
       // https://stackoverflow.com/questions/47219272/how-can-i-use-window-size-in-a-vue-method
       let that = this;
-      this.$nextTick(function() {
+      this.$nextTick(() => {
         window.addEventListener('resize', () => {
           that.rightWidth = this.$vuetify.breakpoint.width / 2;
         });
