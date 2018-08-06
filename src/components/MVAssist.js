@@ -186,14 +186,8 @@ class MVAssist {
     }
   } = {}) {
     pi.styles(this.instance.wrap, wrap)
-
-    for (let el of pi.query('.CodeMirror-merge-gap', true)) {
-      pi.styles(el, gap)
-    }
-
-    for (let el of pi.query('.CodeMirror-gutters', true)) {
-      pi.styles(el, gutters)
-    }
+    pi.styles('.CodeMirror-merge-gap', gap)
+    pi.styles('.CodeMirror-gutters', gutters)
   }
 
   setSize(width, height) {

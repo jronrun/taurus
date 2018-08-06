@@ -173,12 +173,16 @@ core.query = (selector, isAll = false, context = document) => {
   return core.querySelector(selector, isAll, context)
 }
 
-core.styles = (element, style = {}) => {
-  for (let [k, v] of Object.entries(style)) {
-    element.style[k] = v
+core.styles = (target, style = {}) => {
+  if (core.isString(target)) {
+    for (let el of core.query(target, true)) {
+      core.styles(el, style)
+    }
+  } else if (target) {
+    for (let [k, v] of Object.entries(style)) {
+      target.style[k] = v
+    }
   }
-
-  return element
 }
 
 export default core
