@@ -25,6 +25,7 @@ class MVAssist {
 
     this[assists] = {assistEvents, assistOptions}
     this[editors]()
+    this.beauty()
   }
 
   [editors]() {
@@ -163,11 +164,42 @@ class MVAssist {
       inst.state(instState)
     })
 
+    this.beauty()
     return this
   }
 
   mergedView() {
     return this.is2Panels() ? this.left : this.middle
+  }
+
+  beauty({
+    wrap = {
+      border: 'none'
+    },
+    gap = {
+      'border-color': '#d9edf7',
+      'background-color': '#ffffff'
+    },
+    gutters = {
+      border: 'none',
+      'background-color': '#ffffff'
+    }
+  } = {}) {
+    pi.styles(this.instance.wrap, wrap)
+
+    for (let el of pi.query('.CodeMirror-merge-gap', true)) {
+      pi.styles(el, gap)
+    }
+
+    for (let el of pi.query('.CodeMirror-gutters', true)) {
+      pi.styles(el, gutters)
+    }
+  }
+
+  setSize(width, height) {
+    this.actions((inst) => {
+      inst.setSize(width, height)
+    })
   }
 
   /**

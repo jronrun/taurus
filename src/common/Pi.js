@@ -173,4 +173,12 @@ core.query = (selector, isAll = false, context = document) => {
   return core.querySelector(selector, isAll, context)
 }
 
+core.styles = (element, style = {}) => {
+  for (let [k, v] of Object.entries(style)) {
+    element.style[k] = v
+  }
+
+  return element
+}
+
 export default core
