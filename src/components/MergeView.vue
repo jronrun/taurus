@@ -119,7 +119,7 @@
 
     methods: {
       onCmCursorActivity(a, b, c) {
-        console.log('onCmCursorActivity', a, b, c)
+        this.$emit('onCmCursorActivity', a, b, c)
       },
       onReady(instanceOfMergeView) {
         this.instance = new MVAssist(instanceOfMergeView, this.assistEvents, this.assistOptions)
@@ -127,16 +127,16 @@
         this.$emit('ready', this.instance)
       },
       onCmFocus(a, b, c) {
-        console.log('onCmFocus', a, b, c)
+        this.$emit('onCmFocus', a, b, c)
       },
       onCmBlur(a, b, c) {
-        console.log('onCmBlur', a, b, c)
+        this.$emit('onCmBlur', a, b, c)
       },
       onCmInput(code) {
-        console.log('onCmInput', code)
+        this.$emit('onCmInput', code)
       },
       onCmScroll() {
-        console.log('onCmScroll')
+        this.$emit('onCmScroll')
       }
     },
 
@@ -145,39 +145,6 @@
     },
 
     beforeMount() {
-
-      let html = `
-  <div class="pos-f-t">
-    <div class="collapse" id="mapi-header">
-        <div class="container-fluid bg-inverse p-a-1">
-
-        </div>
-    </div>
-    <div class="navbar navbar-light bg-faded navbar-static-top">
-        <button class="navbar-toggler navbar-brand" type="button" data-toggle="collapse" data-target="#mapi-header" title="Multiple Manual API">
-          {{> logo}}
-        </button>
-    </div>
-
-    {{> tmpl/mapi_tmpl}}
-    {{> tmpl/sharing_tmpl}}
-</div>
-      `
-      const orig1 = html.replace('collapse', 'surmon.me@gmail.com')
-      const orig2 = html.replace('collapse', 'surmon.me@gmail.com')
-      .replace('content="320"', 'content="360"')
-      .replace(/<title>([\s\S]*?)<\/title>/ig, '<title>test title</title>')
-      this.options.value=html
-      // this.options.origLeft=html
-      this.options.orig=orig2
-
-      let that = this
-      global.test= function (aa) {
-        Object.assign(that.mergeOptions, aa)
-        console.log(JSON.stringify(that.mergeOptions))
-        that.$forceUpdate()
-      }
-
       // panels 2: value orig, panels 3: origLeft value orig
       this.mergeOptions = Object.assign({
         origLeft: undefined,

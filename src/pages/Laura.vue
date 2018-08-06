@@ -113,10 +113,8 @@
         <v-layout wrap :style="style.layout">
           <v-flex xs12 :style="style.flex">
             <v-card dark :style="style.card">
-              <!--<notemirror @ready="onReady" :code="note">-->
-              <!--</notemirror>-->
-              <mergeview @ready="onReady">
-              </mergeview>
+              <notemirror @ready="onReady" :code="note">
+              </notemirror>
             </v-card>
           </v-flex>
         </v-layout>
@@ -138,12 +136,10 @@
 <script>
   import helper from '../helper'
   import notemirror from '../components/Notemirror'
-  import mv from '../components/MergeView'
 
   export default {
     components: {
-      notemirror,
-      mergeview:mv
+      notemirror
     },
     data() {
       return {
@@ -151,18 +147,18 @@
         instance: null,
         style: {
           layout: {
-            // margin: 0,
-            // padding: 0
+            margin: 0,
+            padding: 0
           },
           container: {
-            // padding: 0,
-            // margin: 0
+            padding: 0,
+            margin: 0
           },
           flex: {
-            // padding: 0
+            padding: 0
           },
           card: {
-            // height: '100%'
+            height: '100%'
           }
         },
         dark: false,
@@ -176,13 +172,13 @@
     },
     methods: {
       onReady(mirror) {
-        // let mirrorH = this.$vuetify.breakpoint.height - this.$refs.header.computedHeight
-        // mirror.setSize(null, mirrorH)
-        // mirror.chgStyle({padding: '8px'})
-        // mirror.mapPredefineKeys({
-        //   Esc: 'Ctrl-Esc'
-        // })
-        // this.instance = mirror
+        let mirrorH = this.$vuetify.breakpoint.height - this.$refs.header.computedHeight
+        mirror.setSize(null, mirrorH)
+        mirror.chgStyle({padding: '8px'})
+        mirror.mapPredefineKeys({
+          Esc: 'Ctrl-Esc'
+        })
+        this.instance = mirror
 
         //TODO rem
         window.mirror=mirror
@@ -215,8 +211,8 @@
       }
     },
     mounted() {
-      // this.setContainerWidth()
-      // this.initRestore()
+      this.setContainerWidth()
+      this.initRestore()
     }
   }
 </script>
