@@ -1,5 +1,5 @@
 <template>
-  <v-code-mirror-wrap :code="noteText" @ready="onReady" :options="noteOptions" :merge="noteMerge">
+  <v-code-mirror-wrap :code="noteText" @ready="onReady" :options="noteOptions">
   </v-code-mirror-wrap>
 </template>
 
@@ -31,7 +31,6 @@
       return {
         instance: null,
         noteText: '',
-        noteMerge: false,
         noteOptions: {}
       }
     },
@@ -48,10 +47,6 @@
       options: {
         type: Object,
         default: () => ({})
-      },
-      merge: {
-        type: Boolean,
-        default: false
       },
 
       assistOptions: {
@@ -83,7 +78,6 @@
       }, this.options.extraKeys || {})
 
       this.noteText = this.code
-      this.noteMerge = this.merge
       this.noteOptions = Object.assign({
         mode: 'markdown',
         keyMap: 'vim',

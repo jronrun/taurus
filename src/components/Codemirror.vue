@@ -1,5 +1,5 @@
 <template>
-  <v-code-mirror v-model="mirrorText" :options="mirrorOptions" :merge="mirrorMerge" @ready="onReady">
+  <v-code-mirror v-model="mirrorText" :options="mirrorOptions" @ready="onReady">
   </v-code-mirror>
 </template>
 
@@ -61,22 +61,10 @@
   import 'codemirror/mode/meta'
   import 'codemirror/mode/javascript/javascript'
 
-  import 'codemirror/addon/merge/merge.css'
-  import 'codemirror/addon/merge/merge'
-
-  // Google DiffMaGtchPatch
-  import DiffMatchPatch from 'diff-match-patch'
-
   import {codemirror} from 'vue-codemirror'
   import CMAssist from '../components/CMAssist'
 
   global.CodeMirror = CodeMirror
-
-  // DiffMatchPatch config with global
-  global.diff_match_patch = DiffMatchPatch
-  global.DIFF_DELETE = -1
-  global.DIFF_INSERT = 1
-  global.DIFF_EQUAL = 0
 
   export default {
     components: {
@@ -87,7 +75,6 @@
       return {
         mirrorText: '',
         instance: null,
-        mirrorMerge: false,
         mirrorOptions: {}
       }
     },
@@ -104,10 +91,6 @@
       options: {
         type: Object,
         default: () => ({})
-      },
-      merge: {
-        type: Boolean,
-        default: false
       },
 
       assistOptions: {
@@ -140,7 +123,6 @@
       }, this.options.extraKeys || {})
 
       this.mirrorText = this.code
-      this.mirrorMerge = this.merge
       this.mirrorOptions = Object.assign({
         autofocus: false,
         lineNumbers: false,

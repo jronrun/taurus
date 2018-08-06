@@ -313,7 +313,7 @@ class CMAssist {
     if (pi.isUndefined(langName)) {
       let rInfo = {}
 
-      Object.assign(rInfo, this.langInfo(this.attrs('mode')))
+      Object.assign(rInfo, this.langInfo(this.attrs('mode') || 'Plain Text'))
       Object.assign(rInfo, {
         chosenMimeOrExt: this.attrs(cmeKey) || ''
       })

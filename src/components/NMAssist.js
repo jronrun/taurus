@@ -41,11 +41,11 @@ let doDefineEx = (cmd, exHandle, desc = '', shortCmd) => {
 class NMAssist extends CMAssist {
   instance = null
 
-  constructor(instanceOfCodeMirror, events = {}, assistOptions = {}) {
+  constructor(instanceOfCodeMirror, assistEvents = {}, assistOptions = {}) {
     super(instanceOfCodeMirror, Object.assign({
       inputRead: function (cm, changeObj) {
       }
-    }, events), assistOptions)
+    }, assistEvents), assistOptions)
 
     this.instance = instanceOfCodeMirror
   }
